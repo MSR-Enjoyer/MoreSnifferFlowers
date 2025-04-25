@@ -5,21 +5,16 @@ import com.google.gson.JsonElement;
 import net.abraxator.moresnifferflowers.init.ModBlocks;
 import net.abraxator.moresnifferflowers.init.ModRecipeSerializers;
 import net.abraxator.moresnifferflowers.init.ModRecipeTypes;
-import net.abraxator.moresnifferflowers.init.ModTags;
 import net.minecraft.ResourceLocationException;
 import net.minecraft.Util;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -29,11 +24,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
 
 public record CorruptionRecipe(ResourceLocation id, String source, List<Entry> list) implements Recipe<Container> {
     public static final Map<Block, Block> HARDCODED_BLOCK = Util.make(Maps.newHashMap(), map -> {
@@ -134,8 +127,6 @@ public record CorruptionRecipe(ResourceLocation id, String source, List<Entry> l
     
     @Override
     public ItemStack getResultItem(RegistryAccess registryAccess) {
-        if (Minecraft.getInstance().level != null)
-            return getResultBlock(Minecraft.getInstance().level.getRandom()).asItem().getDefaultInstance();
         return getResultBlock(null).asItem().getDefaultInstance();
     }
 
