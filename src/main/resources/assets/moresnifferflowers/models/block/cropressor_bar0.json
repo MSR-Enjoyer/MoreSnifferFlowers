@@ -1,6 +1,6 @@
 {
 	"credit": "Made with Blockbench",
-  	"render_type": "cutout",
+  	"render_type": "cutout_mipped",
 	"textures": {
 		"0": "moresnifferflowers:block/cropressor_bar0",
 		"particle": "moresnifferflowers:block/cropressor_bar0"

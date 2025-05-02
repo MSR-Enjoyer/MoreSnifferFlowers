@@ -1,6 +1,6 @@
 {
 	"credit": "Made with Blockbench",
-	"render_type": "cutout",
+	"render_type": "cutout_mipped",
      "ambientocclusion": false,
 	"textures": {
 		"0": "moresnifferflowers:block/vivicus_sapling_0",

@@ -1,7 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"parent": "block/block",
-	"render_type": "cutout",
+	"render_type": "cutout_mipped",
 	"textures": {
 		"0": "moresnifferflowers:block/vivicus_log",
 		"1": "moresnifferflowers:block/vivicus_log1",

@@ -1,7 +1,7 @@
 {
 	"gui_light": "front",
 	"ambientocclusion": false,
- 	"render_type": "cutout",
+ 	"render_type": "cutout_mipped",
 	"display": {
         "ground": {
             "rotation": [ 0, 0, 0 ],

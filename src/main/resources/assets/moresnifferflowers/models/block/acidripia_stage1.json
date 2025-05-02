@@ -1,7 +1,7 @@
 {
 	"credit": "Made with Blockbench",
      "parent": "moresnifferflowers:block/bondripia_stage1",
-	"render_type": "cutout",
+	"render_type": "cutout_mipped",
 	"texture_size": [64, 64],
 	"textures": {
 		"0": "moresnifferflowers:block/acidripia_stage1",
