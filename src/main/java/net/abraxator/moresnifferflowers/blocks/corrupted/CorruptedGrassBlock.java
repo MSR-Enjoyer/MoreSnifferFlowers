@@ -1,6 +1,7 @@
 package net.abraxator.moresnifferflowers.blocks.corrupted;
 
 import net.abraxator.moresnifferflowers.init.ModBlocks;
+import net.abraxator.moresnifferflowers.init.ModServerConfig;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -58,7 +59,7 @@ public class CorruptedGrassBlock extends SpreadingSnowyDirtBlock {
             level.setBlockAndUpdate(pos, Blocks.COARSE_DIRT.defaultBlockState());
         } else {
             if (!level.isAreaLoaded(pos, 3)) return;
-            if (level.getMaxLocalRawBrightness(pos.above()) <=6 ) {
+            if (level.getMaxLocalRawBrightness(pos.above()) <=6 && random.nextDouble() < 0.2D *  ModServerConfig.CORRUPTION_SPREAD_SPEED.get()) {
                 BlockState blockstate = this.defaultBlockState();
 
                 for (int i = 0; i < 4; i++) {

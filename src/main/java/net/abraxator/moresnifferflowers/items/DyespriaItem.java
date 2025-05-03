@@ -97,13 +97,14 @@ public class DyespriaItem extends BlockItem implements Colorable {
     }
     
     private InteractionResult handlePlacement(BlockPos blockPos, Level level, Player player, InteractionHand hand, ItemStack stack) {
+        ItemStack oldStack = stack.copy();
         var posForDyespria = blockPos.above();
         var blockHitResult = new BlockHitResult(posForDyespria.below().getCenter(), Direction.UP, posForDyespria.below(), false);
         var useOnCtx = new UseOnContext(level, player, hand, stack, blockHitResult);
         var result = super.useOn(useOnCtx);
 
         if (level.getBlockEntity(blockPos.above()) instanceof DyespriaPlantBlockEntity entity) {
-            entity.dye = Dye.getDyeFromDyespria(stack);
+            entity.dye = Dye.getDyeFromDyespria(oldStack);
             entity.setChanged();
         }
 

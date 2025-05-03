@@ -17,9 +17,10 @@ import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fluids.FluidInteractionRegistry;
 import net.minecraftforge.fml.ModList;
+import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class MoreSnifferFlowers {
 
     public MoreSnifferFlowers() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        
+
         modEventBus.addListener(this::commonSetup);
         
         ModItems.ITEMS.register(modEventBus);
@@ -65,6 +66,8 @@ public class MoreSnifferFlowers {
         ModAdvancementCritters.init();
         
         event.enqueueWork(() -> {
+            ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, ModServerConfig.SERVER_CONFIG);
+
             AxeItem.STRIPPABLES = Maps.newHashMap(AxeItem.STRIPPABLES);
             AxeItem.STRIPPABLES.put(ModBlocks.CORRUPTED_LOG.get(), ModBlocks.STRIPPED_CORRUPTED_LOG.get());
             AxeItem.STRIPPABLES.put(ModBlocks.VIVICUS_LOG.get(), ModBlocks.STRIPPED_VIVICUS_LOG.get());
