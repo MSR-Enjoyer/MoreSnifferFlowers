@@ -6,15 +6,16 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.item.UseAnim;
+import net.minecraft.world.item.*;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
@@ -28,20 +29,23 @@ public class BottleOfExtractionItem extends Item {
 
     @Override
     public ItemStack finishUsingItem(ItemStack pStack, Level pLevel, LivingEntity pLivingEntity) {
-        var ret = pStack;
 
-        if (!(pLivingEntity instanceof Player player) && pLevel.isClientSide) {
-            return pStack;
+        if (pLivingEntity instanceof Player player && !pLevel.isClientSide) {
+
+            if (pLivingEntity instanceof ServerPlayer serverplayer) {
+                CriteriaTriggers.CONSUME_ITEM.trigger(serverplayer, pStack);
+                serverplayer.awardStat(Stats.ITEM_USED.get(this));
+            }
+
+            if (player.hasEffect(ModMobEffects.EXTRACTED.get())) {
+                doCheaterEasterEgg(pLevel, player);
+                return new ItemStack(Items.POISONOUS_POTATO);
+            }
+
+            pStack = initPotion(player);
+            pLivingEntity.removeAllEffects();
         }
-
-        if (pLivingEntity instanceof ServerPlayer serverplayer) {
-            CriteriaTriggers.CONSUME_ITEM.trigger(serverplayer, pStack);
-            serverplayer.awardStat(Stats.ITEM_USED.get(this));
-        }
-
-        ret = initPotion(((Player) pLivingEntity));
-        pLivingEntity.removeAllEffects();
-        return ret;
+        return pStack;
     }
 
     @Override
@@ -72,6 +76,21 @@ public class BottleOfExtractionItem extends Item {
 
     private boolean canExtract(Level level, Player player) {
         return !level.isClientSide && player.getActiveEffects() != null && !player.getActiveEffects().isEmpty() && !player.hasEffect(ModMobEffects.EXTRACTED.get());
+    }
+
+    private static void doCheaterEasterEgg(Level pLevel, Player player) {
+        player.setAbsorptionAmount(0);
+        player.setHealth(0.1F);
+        player.addEffect(new MobEffectInstance(MobEffects.POISON, 800, 2));
+        player.setSwimming(true);
+        player.setJumping(true);
+        player.setXRot(0F);
+        player.setYHeadRot(0f);
+        pLevel.playSound(null, player, SoundEvents.ENDERMAN_SCREAM, SoundSource.PLAYERS, 1.2F, 1.0F);
+        pLevel.playSound(null, player, SoundEvents.ENDERMAN_SCREAM, SoundSource.PLAYERS, 1.2F, 0.8F);
+        pLevel.playSound(null, player, SoundEvents.ENDERMAN_SCREAM, SoundSource.PLAYERS, 1.2F, 1.3F);
+        pLevel.playSound(null, player, SoundEvents.ENDERMAN_SCREAM, SoundSource.PLAYERS, 1.2F, 0.8F);
+        pLevel.playSound(null, player, SoundEvents.SPLASH_POTION_BREAK, SoundSource.PLAYERS, 1.4F, 1.0F);
     }
 
     @Override
