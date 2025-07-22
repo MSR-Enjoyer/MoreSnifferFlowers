@@ -2,7 +2,7 @@ package net.abraxator.moresnifferflowers.worldgen.configurations.tree.corrupted;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.abraxator.moresnifferflowers.init.ModServerConfig;
+import net.abraxator.moresnifferflowers.init.config.ModServerConfig;
 import net.abraxator.moresnifferflowers.worldgen.configurations.ModTrunkPlacerTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

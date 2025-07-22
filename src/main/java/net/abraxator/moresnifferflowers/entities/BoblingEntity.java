@@ -3,20 +3,22 @@ package net.abraxator.moresnifferflowers.entities;
 import net.abraxator.moresnifferflowers.MoreSnifferFlowers;
 import net.abraxator.moresnifferflowers.entities.goals.BoblingAttackPlayerGoal;
 import net.abraxator.moresnifferflowers.entities.goals.BoblingAvoidPlayerGoal;
-import net.abraxator.moresnifferflowers.init.*;
+import net.abraxator.moresnifferflowers.init.ModAdvancementCritters;
+import net.abraxator.moresnifferflowers.init.ModBlocks;
+import net.abraxator.moresnifferflowers.init.ModEntityTypes;
+import net.abraxator.moresnifferflowers.init.ModItems;
+import net.abraxator.moresnifferflowers.init.config.ModServerConfig;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.syncher.EntityDataAccessor;
-import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.util.ByIdMap;
 import net.minecraft.util.Mth;
-import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
@@ -42,7 +44,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.IntFunction;
 
 public class BoblingEntity extends PathfinderMob {
     private static final EntityDataAccessor<Boolean> DATA_CURED = SynchedEntityData.defineId(BoblingEntity.class, EntityDataSerializers.BOOLEAN);
@@ -152,7 +153,7 @@ public class BoblingEntity extends PathfinderMob {
     protected void actuallyHurt(DamageSource pDamageSource, float pDamageAmount) {
         super.actuallyHurt(pDamageSource, pDamageAmount);
         if (this.isRunning() && pDamageSource.is(DamageTypes.PLAYER_ATTACK) && !isCured()) {
-            var r = 2.5;
+            var r = 1.0;
             var checkR = 1.5;
             Set<Vec3> set = new HashSet<>();
 
@@ -160,9 +161,12 @@ public class BoblingEntity extends PathfinderMob {
                 ModAdvancementCritters.BOBLING_ATTACK.trigger(serverPlayer);
             }
 
-            for (double theta = 0; theta <= Mth.TWO_PI * 3; theta += Mth.TWO_PI / random.nextIntBetweenInclusive(2, 5)) {
-                generateProjectile(set, r, theta + this.level().random.nextDouble(), checkR);
+            if (ModServerConfig.CORRUPTED_BOBLING_GRIEFING.get()) {
+                for (double theta = 0; theta <= Mth.TWO_PI; theta += Mth.TWO_PI / random.nextIntBetweenInclusive(2, 5)) {
+                    generateProjectile(set, r, theta + this.level().random.nextDouble(), checkR);
+                }
             }
+
         }
         
         if (!this.isRunning() && pDamageSource.is(DamageTypes.PLAYER_ATTACK)) {
@@ -217,18 +221,31 @@ public class BoblingEntity extends PathfinderMob {
 
         if(this.finalizePlanting && this.isAlive()) {
             var blockPos = BlockPos.containing(this.position()).relative(this.getDirection());
-            this.level().setBlockAndUpdate(blockPos, ModBlocks.CORRUPTED_SAPLING.get().defaultBlockState());
+            if (!level().isClientSide) {
+
+                boolean config = ModServerConfig.CORRUPTED_BOBLING_GRIEFING.get();
+                boolean isReplaceable = level().getBlockState(blockPos).canBeReplaced();
+
+                if (config || isReplaceable) {
+                    this.level().setBlockAndUpdate(blockPos, ModBlocks.CORRUPTED_SAPLING.get().defaultBlockState());
+                    if (level().getBlockState(blockPos.below()).canBeReplaced())
+                        this.level().setBlockAndUpdate(blockPos.below(), ModBlocks.CORRUPTED_GRASS_BLOCK.get().defaultBlockState());
+                }
+
+            }
             this.discard();
         }
     }
     
     private boolean canPlant() {
-        return
-                this.isRunning() && 
+        BlockPos pos = this.getWantedPos();
+        return  this.isRunning() &&
                 this.isAlive() && 
                 !this.isPlanting() && 
-                this.getWantedPos() != null && 
-                this.position().closerThan(getWantedPos().getCenter(), 0.75F);
+                pos != null &&
+                this.level().getBlockState(pos).canBeReplaced() &&
+                this.level().getBlockState(pos.below()).isFaceSturdy(level(), pos, Direction.UP) &&
+                this.position().closerThan(pos.getCenter(), 0.75F);
     }
 
     private void setupAnimationStates() {
@@ -288,14 +305,14 @@ public class BoblingEntity extends PathfinderMob {
 
 
     private void generateProjectile(Set<Vec3> set, double r, double theta, double checkR) {
-        var x = this.getX() + r * Mth.cos((float) theta);
-        var yx = this.getY() + r * Mth.sin((float) theta);
-        var yz = this.getY() + r * Mth.cos((float) theta);
-        var z = this.getZ() + r * Mth.sin((float) theta);
+        var x = this.getX() + r * Mth.cos((float) theta) * 0.8;
+        var yx = this.getY() + r * Mth.sin((float) theta) + 0.3;
+        var yz = this.getY() + r * Mth.cos((float) theta) + 0.3;
+        var z = this.getZ() + r * Mth.sin((float) theta) * 0.8;
 
-        createAndAddProjectile(set, checkR, new Vec3(x, yo, z));
-        createAndAddProjectile(set, checkR, new Vec3(x, yx, zo));
-        createAndAddProjectile(set, checkR, new Vec3(xo, yz, z));
+      if (random.nextFloat() > 0.5f) createAndAddProjectile(set, checkR, new Vec3(x, yo, z));
+      if (random.nextFloat() > 0.5f) createAndAddProjectile(set, checkR, new Vec3(x, yx, zo));
+      if (random.nextFloat() > 0.5f) createAndAddProjectile(set, checkR, new Vec3(xo, yz, z));
     }
 
     private void createAndAddProjectile(Set<Vec3> set, double checkR, Vec3 vec3) {
@@ -303,33 +320,12 @@ public class BoblingEntity extends PathfinderMob {
         if (set.stream().noneMatch(aabb::contains)) {
             CorruptedProjectile projectile = new CorruptedProjectile(this.level());
             projectile.setPos(vec3);
-            Vec3 dir = new Vec3((projectile.getX() - this.getX())/10, (projectile.getY() - this.getY())/10, (projectile.getZ() - this.getZ())/10).normalize();
+            float slowdown = 2.8f;
+            Vec3 dir = new Vec3((vec3.x() - this.getX())/ slowdown, (vec3.y() - this.getY())/ slowdown, (vec3.z() - this.getZ())/ slowdown);
+
             projectile.setDeltaMovement(dir);
             this.level().addFreshEntity(projectile);
             set.add(vec3);
         }
     }
-
-/*    public enum Type implements StringRepresentable {
-        CORRUPTED(0, "corrupted"),
-        CURED(1, "cured");
-
-        public static final IntFunction<Type> BY_ID = ByIdMap.continuous(Type::id, values(), ByIdMap.OutOfBoundsStrategy.ZERO);
-        private final int id;
-        private final String name;
-
-        Type(int pId, String name) {
-            this.id = pId;
-            this.name = name;
-        }
-
-        public int id() {
-            return this.id;
-        }
-
-        @Override
-        public String getSerializedName() {
-            return name;
-        }
-    }*/
 }

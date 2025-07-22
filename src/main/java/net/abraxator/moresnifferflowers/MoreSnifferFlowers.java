@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.mojang.logging.LogUtils;
 import net.abraxator.moresnifferflowers.compat.quark.OtherModEvents;
 import net.abraxator.moresnifferflowers.init.*;
+import net.abraxator.moresnifferflowers.init.config.ModServerConfig;
 import net.abraxator.moresnifferflowers.networking.ModPacketHandler;
 import net.abraxator.moresnifferflowers.worldgen.configurations.ModTreeDecoratorTypes;
 import net.abraxator.moresnifferflowers.worldgen.configurations.ModTrunkPlacerTypes;
@@ -131,6 +132,15 @@ public class MoreSnifferFlowers {
     
     public static ResourceLocation loc(String path) {
         return new ResourceLocation(MOD_ID, path);
+    }
+
+
+    public static ResourceLocation vanillaLoc(String path) {
+        return new ResourceLocation("minecraft", path);
+    }
+
+    public static ResourceLocation ofLoc(String path) {
+        return ResourceLocation.of(path, ':');
     }
 
     public static String sLoc(String path) {
