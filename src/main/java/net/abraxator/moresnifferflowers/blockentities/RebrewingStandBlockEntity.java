@@ -6,6 +6,7 @@ import net.abraxator.moresnifferflowers.client.gui.menu.RebrewingStandMenu;
 import net.abraxator.moresnifferflowers.init.ModBlockEntities;
 import net.abraxator.moresnifferflowers.init.ModItems;
 import net.abraxator.moresnifferflowers.init.ModMobEffects;
+import net.abraxator.moresnifferflowers.init.config.ModServerConfig;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -135,9 +136,9 @@ public class RebrewingStandBlockEntity extends BaseContainerBlockEntity {
                 if (!itemStack.is(ItemStack.EMPTY.getItem())) {
                     ItemStack outputPotion = ModItems.REBREWED_POTION.get().getDefaultInstance();
 
-                    if(ingredientStack.is(Items.GUNPOWDER)) {
+                    if(ingredientStack.is(ModServerConfig.itemFromLoc(ModServerConfig.REBREWING_SPLASH.get()))) {
                         outputPotion = ModItems.REBREWED_SPLASH_POTION.get().getDefaultInstance();
-                    } else if (ingredientStack.is(Items.DRAGON_BREATH)) {
+                    } else if (ingredientStack.is(ModServerConfig.itemFromLoc(ModServerConfig.REBREWING_LINGERING.get()))) {
                         outputPotion = ModItems.REBREWED_LINGERING_POTION.get().getDefaultInstance();
                     }
 
@@ -211,8 +212,8 @@ public class RebrewingStandBlockEntity extends BaseContainerBlockEntity {
         for (int i = 0; i < listTag.size(); i++) {
             var potion = listTag.getCompound(i);
             var id = potion.getString("forge:id");
-            var amp = potion.getByte("Amplifier") + (ingredient.is(Items.GLOWSTONE_DUST) ? 2 : defaultAmp);
-            var dur = potion.getInt("Duration") + (ingredient.is(Items.REDSTONE) ? 12000 : defaultDur);
+            var amp = potion.getByte("Amplifier") + (ingredient.is(ModServerConfig.itemFromLoc(ModServerConfig.REBREWING_AMPLIFIER.get())) ? 2 : defaultAmp);
+            var dur = potion.getInt("Duration") + (ingredient.is(ModServerConfig.itemFromLoc(ModServerConfig.REBREWING_LENGTH.get())) ? 12000 : defaultDur);
             var splitId = id.split(":");
             var instance = new MobEffectInstance(ForgeRegistries.MOB_EFFECTS.getValue(new ResourceLocation(splitId[0], splitId[1])), dur, amp);
 

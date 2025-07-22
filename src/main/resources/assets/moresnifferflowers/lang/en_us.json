@@ -156,7 +156,7 @@
 	"block.moresnifferflowers.decayed_log": "Decayed Log",
 	"block.moresnifferflowers.corrupted_grass_block": "Corrupted Grass Block",
 	"block.moresnifferflowers.cured_grass_block": "Cured Grass Block",
-	
+
 	"block.moresnifferflowers.bonmeel_filled_cauldron": "Bonmeel Filled Cauldron",
 	"block.moresnifferflowers.acid_filled_cauldron": "Acid Filled Cauldron",
 
@@ -276,23 +276,59 @@
 	"entity.moresnifferflowers.corrupted_boat": "Corrupted Boat",
 	"entity.moresnifferflowers.corrupted_chest_boat": "Corrupted Chest Boat",
 
-	
+
 	"sound.moresnifferflowers.block.cropressor.belt": "Cropressor Belt",
 	"sound.moresnifferflowers.item.dyespria.paint": "Dyespria Paint",
 
 # Config 🤖
-	
+
   	"moresnifferflowers.configuration.section.moresnifferflowers.server.toml": "MSF Server Config",
  	"moresnifferflowers.configuration.title": "More Sniffer Flowers",
  	"moresnifferflowers.configuration.corruption": "Corruption Config",
   	"moresnifferflowers.configuration.section.moresnifferflowers.server.toml.title": "MSF Server Config",
  	"moresnifferflowers.configuration.corruption.button": "Edit",
- 	"moresnifferflowers.configuration.corruption.tooltip": "Settings related to corrupted blocks",
+  	"moresnifferflowers.configuration.corruption.tooltip": "Settings related to corrupted blocks",
+ 	"moresnifferflowers.configuration.hardened_mouth_effect": "Hardened Mouth Effect",
+ 	"moresnifferflowers.configuration.hardened_mouth_effect.button": "Edit",
+ 	"moresnifferflowers.configuration.hardened_mouth_effect.tooltip": "Settings related to the Hardened mouth GUI",
+ 	"moresnifferflowers.configuration.block_patterns": "Block Patterns",
+ 	"moresnifferflowers.configuration.block_patterns.button": "Edit",
+ 	"moresnifferflowers.configuration.block_patterns.tooltip": "Settings related to Block Patterns",
+ 	"moresnifferflowers.configuration.rebrewing": "Block Patterns",
+ 	"moresnifferflowers.configuration.rebrewing.button": "Edit",
+ 	"moresnifferflowers.configuration.rebrewing.tooltip": "Settings related to the Rebrewing Recipe",
+
+
+ 	"moresnifferflowers.configuration.restart_required": "A lot of these require a game restart seemingly at random. Restart your game before reporting it as a bug!",
 
  	"moresnifferflowers.configuration.corruption_spread_speed": "Corruption Spread Speed",
 	"moresnifferflowers.configuration.corrupted_tree_grow_through": "Corrupted Tree Griefing",
  	"moresnifferflowers.configuration.corruption_spread_speed.tooltip": "Spread speed multiplier of corrupted grass blocks, 1 = Default, 0 = Disabled",
  	"moresnifferflowers.configuration.corrupted_tree_grow_through.tooltip": "Should the corrupted tree be able to grow through and destroy blocks? Default = true",
+
+ 	"moresnifferflowers.configuration.hardened_mouth_x": "Hardened Mouth X",
+ 	"moresnifferflowers.configuration.hardened_mouth_x.tooltip": "Move extra slots from the Hardened mouth effect left to right",
+ 	"moresnifferflowers.configuration.hardened_mouth_y": "Hardened Mouth Y",
+ 	"moresnifferflowers.configuration.hardened_mouth_y.tooltip": "Move extra slots from the Hardened mouth effect up and down",
+ 	
+ 	"moresnifferflowers.configuration.block_pattern_render_distance": "Block Pattern Render Distance",
+ 	"moresnifferflowers.configuration.block_pattern_render_distance.tooltip": "Input in blocks. Negative values use a division of your current render distance instead",
+ 	"moresnifferflowers.configuration.block_pattern_offset": "Block Pattern Offset",
+ 	"moresnifferflowers.configuration.block_pattern_offset.tooltip": "How far block patterns are from their block, low values Z-fight, high values look detached",
+ 	"moresnifferflowers.configuration.block_pattern_smooth_lighting": "Block Pattern Smooth Lighting",
+ 	"moresnifferflowers.configuration.block_pattern_smooth_lighting.tooltip": "Enables smooth lighting for block patterns",
+
+ 	"moresnifferflowers.configuration.rebrew_length": "Length Item",
+ 	"moresnifferflowers.configuration.rebrew_amplifier": "Amplifier Item",
+ 	"moresnifferflowers.configuration.rebrew_splash": "Splash Item",
+ 	"moresnifferflowers.configuration.rebrew_lingering": "Lingering Item",
+ 	"moresnifferflowers.configuration.rebrew_length.tooltip": "",
+ 	"moresnifferflowers.configuration.rebrew_amplifier.tooltip": "",
+ 	"moresnifferflowers.configuration.rebrew_splash.tooltip": "",
+ 	"moresnifferflowers.configuration.rebrew_lingering.tooltip": "",
+
+
+
 
 
 

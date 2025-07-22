@@ -37,7 +37,6 @@ public class ModItemTagsProvider extends ItemTagsProvider {
 
         this.tag(ModTags.ModItemTags.CROPRESSOR_PIECES).add(ModItems.SCRAP_PIECE.get(), ModItems.BELT_PIECE.get(), ModItems.ENGINE_PIECE.get(), ModItems.TUBE_PIECE.get(), ModItems.PRESS_PIECE.get());
 
-        this.tag(ModTags.ModItemTags.REBREWING_STAND_INGREDIENTS).add(Items.REDSTONE, Items.GLOWSTONE_DUST, Items.GUNPOWDER, Items.DRAGON_BREATH);
         this.tag(ModTags.ModItemTags.REBREWED_POTIONS).add(ModItems.REBREWED_POTION.get(), ModItems.REBREWED_SPLASH_POTION.get(), ModItems.REBREWED_LINGERING_POTION.get());
 
         this.tag(ModTags.ModItemTags.VIVICUS_LOGS).add(ModBlocks.VIVICUS_LOG.get().asItem(), ModBlocks.VIVICUS_WOOD.get().asItem(), ModBlocks.STRIPPED_VIVICUS_LOG.get().asItem(), ModBlocks.STRIPPED_VIVICUS_WOOD.get().asItem() );
