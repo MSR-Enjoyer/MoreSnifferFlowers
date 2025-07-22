@@ -15,7 +15,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "minecraft:cropressed_carrot_from_cropressing"
+        "recipe": "moresnifferflowers:cropressing_cropressed_nether_wart"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
@@ -28,7 +28,7 @@
   ],
   "rewards": {
     "recipes": [
-      "minecraft:cropressed_carrot_from_cropressing"
+      "moresnifferflowers:cropressing_cropressed_nether_wart"
     ]
   },
   "sends_telemetry_event": false

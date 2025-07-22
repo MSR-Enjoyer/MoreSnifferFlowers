@@ -16,7 +16,7 @@ public record CropressingRecipe(ResourceLocation id, Ingredient ingredient, int 
     @Override
     public boolean matches(Container pContainer, Level pLevel) {
         ItemStack itemStack = pContainer.getItem(0);
-        return itemStack.getCount() == count && ingredient.test(itemStack.copyWithCount(1));
+        return itemStack.getCount() >= count && ingredient.test(itemStack.copyWithCount(1));
     }
 
     @Override

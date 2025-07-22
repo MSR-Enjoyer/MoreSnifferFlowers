@@ -6,14 +6,15 @@ import net.abraxator.moresnifferflowers.components.Colorable;
 import net.abraxator.moresnifferflowers.components.Dye;
 import net.abraxator.moresnifferflowers.init.ModBlocks;
 import net.abraxator.moresnifferflowers.init.ModItems;
-import net.abraxator.moresnifferflowers.init.ModStateProperties;
 import net.abraxator.moresnifferflowers.items.DyespriaItem;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 
@@ -21,13 +22,6 @@ import java.awt.*;
 public class ModColorHandler {
     @SubscribeEvent
     public static void onRegisterBlockColorHandlers(RegisterColorHandlersEvent.Block event) {
-        event.register((state, level, pos, tintIndex) -> {
-            if(tintIndex == 0 && state.getValue(ModStateProperties.FULLNESS) > 0) {
-                return state.getValue(ModStateProperties.CROP).tint;
-            }        
-            
-            return -1;
-        }, ModBlocks.CROPRESSOR_CENTER.get());
         event.register((pState, pLevel, pPos, pTintIndex) -> {
             Colorable colorable = ((Colorable) pState.getBlock());
             Dye dye = colorable.getDyeFromBlock(pState);
@@ -101,7 +95,47 @@ public class ModColorHandler {
         }, ModItems.EXTRACTED_BOTTLE.get(), ModItems.REBREWED_POTION.get(), ModItems.REBREWED_SPLASH_POTION.get(), ModItems.REBREWED_LINGERING_POTION.get());
     }
 
+    public static float @NotNull [] getColorHSB(int originalColor) {
+        int startRed = (originalColor >> 16) & 0xFF;
+        int startGreen = (originalColor >> 8) & 0xFF;
+        int startBlue = originalColor & 0xFF;
+        return Color.RGBtoHSB(startRed, startGreen, startBlue, null);
+    }
+
     public static float[] hexToRGB(int hex) {
         return new float[] {(hex >> 16) & 0xFF, (hex >> 8) & 0xFF, hex & 0xFF};
+    }
+
+    public static int RGBtoInt(Vec3 color) {
+        int r = (int) color.x;
+        int g = (int) color.y;
+        int b = (int) color.z;
+
+        int rgb = r;
+        rgb = (rgb << 8) + g;
+        rgb = (rgb << 8) + b;
+
+        return rgb;
+    }
+
+    public static int barColorHelper(int input, int maxInput){
+        int lowColor = 0x8c1111;
+        int highColor = 0x179529;
+
+        int lowRed = (lowColor >> 16) & 0xFF;
+        int lowGreen = (lowColor >> 8) & 0xFF;
+        int lowBlue = lowColor & 0xFF;
+
+        int highRed = (highColor >> 16) & 0xFF;
+        int highGreen = (highColor >> 8) & 0xFF;
+        int highBlue = highColor & 0xFF;
+
+        float[] lowHSB =  Color.RGBtoHSB(lowRed, lowGreen, lowBlue, null);
+        float[] highHSB =  Color.RGBtoHSB(highRed, highGreen, highBlue, null);
+
+
+        float finalHue = ((lowHSB[0] * (Math.abs(input - maxInput))) + (highHSB[0] * input)) / maxInput;
+
+        return Mth.hsvToRgb(finalHue, 1.0F, 1.0F);
     }
 }

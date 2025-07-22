@@ -2,6 +2,7 @@ package net.abraxator.moresnifferflowers.blocks.cropressor;
 
 import net.abraxator.moresnifferflowers.blockentities.CropressorBlockEntity;
 import net.abraxator.moresnifferflowers.init.ModBlocks;
+import net.abraxator.moresnifferflowers.init.ModItems;
 import net.abraxator.moresnifferflowers.init.ModStateProperties;
 import net.abraxator.moresnifferflowers.init.ModTags;
 import net.minecraft.core.BlockPos;
@@ -39,7 +40,7 @@ public class CropressorBlockBase extends HorizontalDirectionalBlock {
     protected static final VoxelShape CENTER_SOUTH = Block.box(0, 0, 0, 16, 11, 16);
     protected static final VoxelShape CENTER_WEST = Block.box(0, 0, 0, 16, 11, 16);
     protected static final VoxelShape CENTER_NORTH = Block.box(0, 0, 0, 16, 11, 16);
-    
+
     public CropressorBlockBase(Properties pProperties, Part part) {
         super(pProperties);
         PART = part;
@@ -67,7 +68,7 @@ public class CropressorBlockBase extends HorizontalDirectionalBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(FACING, ModStateProperties.FULLNESS, ModStateProperties.CROP);
+        pBuilder.add(FACING, ModStateProperties.FULLNESS);
     }
 
     private Direction getNeighbourDirection(Part part, Direction direction) {
@@ -88,6 +89,11 @@ public class CropressorBlockBase extends HorizontalDirectionalBlock {
         
         return super.updateShape(pState, pDirection, pNeighborState, pLevel, pCurrentPos, pNeighborPos);
             
+    }
+
+    @Override
+    public ItemStack getCloneItemStack(BlockGetter level, BlockPos pos, BlockState state) {
+        return ModItems.CROPRESSOR.get().getDefaultInstance();
     }
 
     @Nullable
@@ -120,10 +126,9 @@ public class CropressorBlockBase extends HorizontalDirectionalBlock {
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         ENTITY_POS = getEntityPos(pLevel, pPos, PART);
-        if (!pLevel.isClientSide && pLevel.getBlockEntity(ENTITY_POS) instanceof CropressorBlockEntity entity && entity.canInteract() && pPlayer.getMainHandItem().is(ModTags.ModItemTags.CROPRESSABLE_CROPS)) {
-            entity.addItem(pPlayer.getItemInHand(pHand));
+        if (!pLevel.isClientSide && pLevel.getBlockEntity(ENTITY_POS) instanceof CropressorBlockEntity entity && entity.canInteract() && pPlayer.getMainHandItem().is(ModTags.ModItemTags.CROPRESSABLE)) {
             
-            return InteractionResult.SUCCESS;
+            return entity.addItem(pPlayer.getItemInHand(pHand));
         }
 
         return InteractionResult.FAIL;

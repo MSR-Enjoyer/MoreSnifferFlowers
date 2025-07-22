@@ -79,7 +79,8 @@ public class CorruptedProjectile extends ThrowableItemProjectile {
         Entity entity = pResult.getEntity();
         if(entity instanceof LivingEntity livingEntity) {
             entity.hurt(this.damageSources().thrown(this, this.getOwner()), 0.0F);
-            livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2));
+          if (!level().isClientSide)
+              livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2));
         }
         this.discard();
     }
