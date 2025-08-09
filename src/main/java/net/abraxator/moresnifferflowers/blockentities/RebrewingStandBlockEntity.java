@@ -110,7 +110,7 @@ public class RebrewingStandBlockEntity extends BaseContainerBlockEntity {
 
         if(!ogPotionStack.isEmpty()) {
             var potionContent = getEffect(ogPotionStack, ingredientStack);
-            this.cost = potionContent != null ? 4 + (potionContent.size() - 2) * 2 : 17;
+            this.cost = potionContent != null ? 4 + (potionContent.size() - 2) : 17;
 
             if(canBrew()) {
                 brewProgress++;
@@ -176,7 +176,7 @@ public class RebrewingStandBlockEntity extends BaseContainerBlockEntity {
         boolean ret = false;
         boolean correctInvContent = !inv.get(2).isEmpty() && inv.get(1).is(ModItems.EXTRACTED_BOTTLE.get());
         boolean hasFuel = fuel >= 1 && this.fuel >= this.cost;
-        boolean correctCost = this.cost <= 16;
+        boolean correctCost = this.cost <= 64;
         
 
         for(int i = 3; i <= 5; i++) {
